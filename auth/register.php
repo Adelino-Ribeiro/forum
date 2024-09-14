@@ -19,9 +19,21 @@
 			$username = $_POST['username'];
 			$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 			$about = $_POST['about'];
-			$avatar = $_FILES['avatar']['name'];
 
-			$dir = "img/" . basename($avatar);
+			if(isset($_FILES['avatar'])) {
+				// Pega o nome do arquivo enviado
+				$avatar = $_FILES['avatar']['name'];
+				
+				// Define o diretório de destino
+				$dir = "../img/" . basename($avatar);
+				
+				// Verifica se o arquivo foi enviado sem erros
+				if(move_uploaded_file($_FILES['avatar']['tmp_name'], $dir)) {
+					// echo "Upload do avatar feito com sucesso!";
+				} else {
+					echo "<script>alert('Erro ao fazer upload do avatar.')</script>";
+				}
+			}
 
 			$insert = $conn -> prepare("INSERT INTO users (name, email, username, password, avatar, about) VALUES (:name, :email, :username, :password, :avatar, :about)");
 
@@ -31,7 +43,7 @@
 				":email" => $email,
 				":username" => $username,
 				":password" => $password,
-				":avatar" => $avatr,
+				":avatar" => $avatar,
 				":about" => $about,
 
 			]);
