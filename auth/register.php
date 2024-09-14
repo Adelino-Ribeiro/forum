@@ -4,6 +4,8 @@
 
 <?php   
 
+	if (isset($_SESSION['username'])) header("location: " . APPURL . "");
+
 	if (isset($_POST['register'])) {
 
 		if (empty($_POST['name']) OR empty($_POST['email']) OR empty($_POST['username']) OR empty($_POST['password']) OR empty($_POST['about'])) {

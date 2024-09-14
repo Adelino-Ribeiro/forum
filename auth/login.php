@@ -4,6 +4,8 @@
 
 <?php
 
+if (isset($_SESSION['username'])) header("location: " . APPURL . "");
+
 if (isset($_POST['login'])) {
 
 	if (empty($_POST['email']) or empty($_POST['password'])) {
@@ -25,12 +27,22 @@ if (isset($_POST['login'])) {
 
 			if (password_verify($password, $fetch['password'])) {
 
-				// $_SESSION['email'] = $fetch['email'];
+				$_SESSION['user_id'] = $fetch['id'];
+				
+				$_SESSION['name'] = $fetch['name'];
+				
+				$_SESSION['email'] = $fetch['email'];
+				
+				$_SESSION['username'] = $fetch['username'];
+				
+				$_SESSION['avatar'] = $fetch['avatr'];
+				
+				$_SESSION['about'] = $fetch['about'];
 
-				echo "<script>alert('LOGGED IN')</script>";
+				header("location: " . APPURL . "");
 
-				header("location: ../index.php");
 			} else echo "<script>alert('email or password is wrong')</script>";
+
 		} else echo "<script>alert('email or password is wrong')</script>";
 	}
 }
