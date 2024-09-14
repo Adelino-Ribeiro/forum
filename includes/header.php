@@ -41,7 +41,7 @@ define("APPURL", "http://localhost/show-code/forum");
 
           <?php if (!empty($_SESSION['username'])) : ?>
 
-            <li><a href="create.php">Create Topic</a></li>
+            <li><a href="<?php echo APPURL ?>/topics/create.php">Create Topic</a></li>
 
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -58,7 +58,7 @@ define("APPURL", "http://localhost/show-code/forum");
 
             <li><a href="<?php echo APPURL ?>/auth/register.php">Register</a></li>
             <li><a href="<?php echo APPURL ?>/auth/login.php">Login</a></li>
-            
+
           <?php endif ?>
         </ul>
       </div>
