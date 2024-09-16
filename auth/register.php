@@ -33,7 +33,7 @@
 				} else {
 					echo "<script>alert('Erro ao fazer upload do avatar.')</script>";
 				}
-			}
+			} else $avatar = "gravatar.jpg";
 
 			$insert = $conn -> prepare("INSERT INTO users (name, email, username, password, avatar, about) VALUES (:name, :email, :username, :password, :avatar, :about)");
 

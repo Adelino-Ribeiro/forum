@@ -4,22 +4,23 @@
 
 <?php
 
-$topics = $conn->query("SELECT 
-		topics.id AS id,
-		topics.title AS title,
-		topics.category AS category,
-		users.username AS username,
-		users.avatar AS user_avatar,
-		topics.create_at AS created_at,
-		COUNT(replies.topic_id) AS count_replies
-	FROM topics
-	INNER JOIN users ON topics.user_id = users.id
-	LEFT JOIN replies ON replies.topic_id = topics.id
-	GROUP BY(replies.topic_id);");
+	$topics = $conn->query("SELECT 
+			topics.id AS id,
+			topics.title AS title,
+			topics.category AS category,
+			users.username AS username,
+			users.avatar AS user_avatar,
+			topics.create_at AS created_at,
+			COUNT(replies.id) AS count_replies
+		FROM topics
+		INNER JOIN users ON topics.user_id = users.id
+		LEFT JOIN replies ON replies.topic_id = topics.id
+		GROUP BY topics.id, topics.title, topics.category, users.username, users.avatar, topics.create_at
+		ORDER BY topics.create_at DESC;");
 
-$topics->execute();
+	$topics->execute();
 
-$allTopics = $topics->fetchAll(PDO::FETCH_OBJ);
+	$allTopics = $topics->fetchAll(PDO::FETCH_OBJ);
 
 
 ?>
@@ -41,7 +42,7 @@ $allTopics = $topics->fetchAll(PDO::FETCH_OBJ);
 							<li class="topic">
 								<div class="row">
 									<div class="col-md-2">
-										<img class="avatar pull-left" src="img/<?php echo (isset($topic->users_avatar)) ? $topic->users_avatar : "gravatar.png"; ?>" />
+										<img class="avatar pull-left" src="img/<?php echo (isset($topic->user_avatar)) ? $topic->user_avatar : "gravatar.jpg"; ?>" />
 									</div>
 									<div class="col-md-10">
 										<div class="topic-content pull-right">

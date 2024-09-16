@@ -61,7 +61,7 @@ if (isset($_GET['id'])) {
 							<div class="row">
 								<div class="col-md-2">
 									<div class="user-info">
-										<img class="avatar pull-left" src="../img/<?php echo (isset($singleTopic->avatar)) ? $singleTopic->avatar : "gravatar.png"; ?>" />
+										<img class="avatar pull-left" src="../img/<?php echo (isset($singleTopic->avatar)) ? $singleTopic->avatar : "gravatar.jpg"; ?>" />
 										<ul>
 											<li><strong><?php echo $singleTopic->username; ?></strong></li>
 											<li><?php echo $count->count_topics; ?> Posts</li>
@@ -74,6 +74,12 @@ if (isset($_GET['id'])) {
 										<p><?php echo $singleTopic->body; ?></p>
 									</div>
 								</div>
+								<?php if (isset($_SESSION['user_id'])) : ?>
+									<?php if ($singleTopic->user_id == $_SESSION['user_id']) : ?>
+										<a href="delete.php?id=<?php echo $singleTopic->id; ?>" class="btn btn-danger" role="button">Delete</a>
+										<a href="update.php?id=<?php echo $singleTopic->id; ?>" class="btn btn-warning" role="button">Update</a>
+									<?php endif; ?>
+								<?php endif; ?>
 							</div>
 						</li>
 						<?php foreach ($allReplies as $reply) : ?>
@@ -81,7 +87,7 @@ if (isset($_GET['id'])) {
 								<div class="row">
 									<div class="col-md-2">
 										<div class="user-info">
-											<img class="avatar pull-left" src="../img/<?php echo (isset($reply->user_avatar)) ? $reply->user_avatar : "gravatar.png"; ?>" />
+											<img class="avatar pull-left" src="../img/<?php echo (isset($reply->user_avatar)) ? $reply->user_avatar : "gravatar.jpg"; ?>" />
 											<ul>
 												<li><strong><?php echo $reply->username; ?></strong></li>
 												<li>43 Posts</li>
