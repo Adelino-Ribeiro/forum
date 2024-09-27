@@ -69,7 +69,7 @@ SELECT
     replies.*
 FROM replies
 INNER JOIN users ON replies.user_id = users.id
-WHERE topic_id = 1;
+WHERE topic_id = 6;
 
 INSERT INTO replies (user_id, topic_id, reply) 
 VALUES 

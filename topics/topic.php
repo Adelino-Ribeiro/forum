@@ -11,10 +11,10 @@ if (isset($_GET['id'])) {
 	// 
 
 	$topic = $conn->query("SELECT users.id AS user_id, users.username, users.avatar, topics.* 
-			FROM topics 
-			INNER JOIN users
-			ON topics.user_id = users.id
-			WHERE topics.id = '$id'");
+				FROM topics 
+				INNER JOIN users
+				ON topics.user_id = users.id
+				WHERE topics.id = '$id'");
 
 	$topic->execute();
 
@@ -23,8 +23,8 @@ if (isset($_GET['id'])) {
 	// number of post for every user
 
 	$topicCount = $conn->query("SELECT COUNT(*) AS count_topics
-			FROM topics 
-			WHERE user_id = '$singleTopic->user_id'");
+				FROM topics 
+				WHERE user_id = '$singleTopic->user_id'");
 
 	$topicCount->execute();
 
@@ -33,16 +33,41 @@ if (isset($_GET['id'])) {
 	// 
 
 	$reply = $conn->query("SELECT 
-				users.username AS username,
-				users.avatar AS user_avatar,
-				replies.*
-			FROM replies
-			INNER JOIN users ON replies.user_id = users.id
-			WHERE topic_id = '$id'");
+					users.username AS username,
+					users.avatar AS user_avatar,
+					replies.*
+				FROM replies
+				INNER JOIN users ON replies.user_id = users.id
+				WHERE topic_id = '$id'");
 
 	$reply->execute();
 
 	$allReplies = $reply->fetchAll(PDO::FETCH_OBJ);
+}
+
+if (isset($_POST['submit'])) {
+
+	if (empty($_POST['reply'])) {
+
+		echo "<script>alert('inputs are empty')</script>";
+	} else {
+
+		$user_id = $_SESSION['user_id'];
+		$topic_id = $id;
+		$reply = $_POST['reply'];
+
+		$insert = $conn->prepare("INSERT INTO replies (user_id, topic_id, reply) VALUES (:user_id, :topic_id, :reply)");
+
+		$insert->execute([
+
+			":user_id" => $user_id,
+			":topic_id" => $topic_id,
+			":reply" => $reply,
+
+		]);
+
+		header("location: " . APPURL . "/topics/topic.php?id=" . $id . "");
+	}
 }
 
 ?>
@@ -73,13 +98,13 @@ if (isset($_GET['id'])) {
 									<div class="topic-content pull-right">
 										<p><?php echo $singleTopic->body; ?></p>
 									</div>
-								</div>
-								<?php if (isset($_SESSION['user_id'])) : ?>
-									<?php if ($singleTopic->user_id == $_SESSION['user_id']) : ?>
-										<a href="delete.php?id=<?php echo $singleTopic->id; ?>" class="btn btn-danger" role="button">Delete</a>
-										<a href="update.php?id=<?php echo $singleTopic->id; ?>" class="btn btn-warning" role="button">Update</a>
+									<?php if (isset($_SESSION['user_id'])) : ?>
+										<?php if ($singleTopic->user_id == $_SESSION['user_id']) : ?>
+											<a href="delete.php?id=<?php echo $singleTopic->id; ?>" class="btn btn-danger" role="button">Delete</a>
+											<a href="update.php?id=<?php echo $singleTopic->id; ?>" class="btn btn-warning" role="button">Update</a>
+										<?php endif; ?>
 									<?php endif; ?>
-								<?php endif; ?>
+								</div>
 							</div>
 						</li>
 						<?php foreach ($allReplies as $reply) : ?>
@@ -99,20 +124,30 @@ if (isset($_GET['id'])) {
 										<div class="topic-content pull-right">
 											<p><?php echo $reply->reply; ?></p>
 										</div>
+
+										<?php if (isset($_SESSION['user_id'])) : ?>
+
+											<?php if ($reply ->user_id == $_SESSION['user_id']) : ?>
+												<a href="../replies/delete.php?id=<?php echo $reply-> id; ?>" class="btn btn-danger" role="button">Delete</a>
+												<a href="../replies/update.php?id=<?php echo $reply-> id; ?>" class="btn btn-warning" role="button">Update</a>
+											<?php endif; ?>
+
+										<?php endif; ?>
+
 									</div>
 								</div>
 							</li>
 						<?php endforeach; ?>
 					</ul>
 					<h3>Reply To Topic</h3>
-					<form role="form">
+					<form role="form" method="POST" action="topic.php?id=<?php echo $id ?>">
 						<div class="form-group">
-							<textarea id="reply" rows="10" cols="80" class="form-control" name="reply"></textarea>
+							<textarea name="reply" id="reply" rows="10" cols="80" class="form-control"></textarea>
 							<script>
 								CKEDITOR.replace('reply');
 							</script>
 						</div>
-						<button type="submit" class="color btn btn-default">Submit</button>
+						<button name="submit" type="submit" class="color btn btn-default">Reply</button>
 					</form>
 				</div>
 			</div>
