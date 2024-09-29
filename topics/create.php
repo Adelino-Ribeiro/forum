@@ -2,39 +2,42 @@
 
 <?php require "../config/config.php" ?>
 
-<?php   
+<?php
 
-	if (!isset($_SESSION['username'])) header("location: " . APPURL . "");
+if (!isset($_SESSION['username'])) header("location: " . APPURL . "");
 
-	if (isset($_POST['submit'])) {
+$categories = $conn->query("SELECT id, name FROM categories");
 
-		if (empty($_POST['title']) OR empty($_POST['category']) OR empty($_POST['body'])) {
+$categories->execute();
 
-			echo "<script>alert('on or more inputs are empty')</script>";
-	
-		} else {
-	
-			$title = $_POST['title'];
-			$category = $_POST['category'];
-			$body = $_POST['body'];
-			$user_id = $_SESSION['user_id'];
+$allCategories = $categories->fetchAll(PDO::FETCH_OBJ);
 
-			$insert = $conn -> prepare("INSERT INTO topics (user_id, title, category, body) VALUES (:user_id, :title, :category, :body)");
+if (isset($_POST['submit'])) {
 
-			$insert -> execute([
-				
-				":user_id" => $user_id,
-				":title" => $title,
-				":category" => $category,
-				":body" => $body,
+	if (empty($_POST['title']) or empty($_POST['category']) or empty($_POST['body'])) {
 
-			]);
+		echo "<script>alert('on or more inputs are empty')</script>";
+	} else {
 
-			header("location: " . APPURL . "");
-	
-		}
+		$title = $_POST['title'];
+		$category_id = $_POST['category'];
+		$body = $_POST['body'];
+		$user_id = $_SESSION['user_id'];
 
+		$insert = $conn->prepare("INSERT INTO topics (user_id, title, category_id, body) VALUES (:user_id, :title, :category_id, :body)");
+
+		$insert->execute([
+
+			":user_id" => $user_id,
+			":title" => $title,
+			":category_id" => $category_id,
+			":body" => $body,
+
+		]);
+
+		header("location: " . APPURL . "");
 	}
+}
 
 
 ?>
@@ -55,17 +58,17 @@
 						</div>
 						<div class="form-group">
 							<label>Category</label>
+							
 							<select name="category" class="form-control">
-								<option value="Design">Design</option>
-								<option value="Development">Development</option>
-								<option value="Business & Marketing">Business & Marketing</option>
-								<option value="Search Engines">Search Engines</option>
-								<option value="Cloud & Hosting">Cloud & Hosting</option>
+								<?php foreach($allCategories as $categ) : ?>
+										<option value="<?php echo $categ -> id; ?>"><?php echo $categ -> name; ?></option>"
+								<?php endforeach; ?>
 							</select>
+
 						</div>
 						<div class="form-group">
 							<label>Topic Body</label>
-							<textarea  name="body" id="body" rows="10" cols="80" class="form-control"></textarea>
+							<textarea name="body" id="body" rows="10" cols="80" class="form-control"></textarea>
 							<script>
 								CKEDITOR.replace('body');
 							</script>
