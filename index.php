@@ -49,7 +49,7 @@
 										<div class="topic-content pull-right">
 											<h3><a href="<?php echo APPURL ?>/topics/topic.php?id=<?php echo $topic->id; ?>"><?php echo $topic->title; ?></a></h3>
 											<div class="topic-info">
-												<a href="<?php echo APPURL ?>/categories/show.php?id=<?php echo $topic -> category_id; ?> "><?php echo $topic->category; ?></a> >> <a href="profile.html"><?php echo $topic->username; ?></a> >> Posted on: <?php echo $topic->created_at; ?>
+												<a href="<?php echo APPURL ?>/categories/show.php?id=<?php echo $topic -> category_id; ?> "><?php echo $topic->category; ?></a> >> <a href="<?php echo APPURL ?>/users/profile.php?id=<?php echo $_SESSION["user_id"] ?>"><?php echo $topic->username; ?></a> >> Posted on: <?php echo $topic->created_at; ?>
 												<span class="color badge pull-right"><?php echo $topic->count_replies; ?></span>
 											</div>
 										</div>

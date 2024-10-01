@@ -1,5 +1,6 @@
 <?php
 
+// forum topics
 $topics = $conn->query("SELECT 
 		count(*) AS all_topics
 	FROM topics");
@@ -8,7 +9,7 @@ $topics->execute();
 
 $allTopics = $topics->fetch(PDO::FETCH_OBJ);
 
-// 
+// foruum categories
 $categories = $conn->query("SELECT categories.id AS id, categories.name AS name,
 		COUNT(topics.category_id) AS count_category
 	FROM categories 
@@ -20,7 +21,7 @@ $categories->execute();
 
 $allCategories = $categories->fetchAll(PDO::FETCH_OBJ);
 
-// 
+// forum users
 $users = $conn->query("SELECT 
 		count(*) AS all_users
 	FROM users");
@@ -28,6 +29,15 @@ $users = $conn->query("SELECT
 $users->execute();
 
 $allUsers = $users->fetch(PDO::FETCH_OBJ);
+
+// forum topics
+$categ = $conn->query("SELECT 
+		count(*) AS all_categories
+	FROM categories");
+
+$categ ->execute();
+
+$allCateg = $categ->fetch(PDO::FETCH_OBJ);
 
 
 ?>
@@ -55,7 +65,7 @@ $allUsers = $users->fetch(PDO::FETCH_OBJ);
 			<div class="list-group">
 				<a href="#" class="list-group-item">Total Number of Users:<span class="color badge pull-right"><?php echo $allUsers->all_users; ?></span></a>
 				<a href="#" class="list-group-item">Total Number of Topics:<span class="color badge pull-right"><?php echo $allTopics->all_topics; ?></span></a>
-				<a href="#" class="list-group-item">Total Number of Categories: <span class="color badge pull-right">12</span></a>
+				<a href="#" class="list-group-item">Total Number of Categories: <span class="color badge pull-right"><?php echo $allCateg->all_categories; ?></span></a>
 
 			</div>
 		</div>

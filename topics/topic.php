@@ -43,7 +43,7 @@ if (isset($_GET['id'])) {
 	$reply->execute();
 
 	$allReplies = $reply->fetchAll(PDO::FETCH_OBJ);
-}
+} else header("location: " . APPURL . "/404.php");
 
 if (isset($_POST['submit'])) {
 
@@ -90,7 +90,7 @@ if (isset($_POST['submit'])) {
 										<ul>
 											<li><strong><?php echo $singleTopic->username; ?></strong></li>
 											<li><?php echo $count->count_topics; ?> Posts</li>
-											<li><a href="profile.php">Profile</a>
+											<li><a href="<?php echo APPURL ?>/users/profile.php?id=<?php echo $_SESSION["user_id"] ?>">Profile</a>
 										</ul>
 									</div>
 								</div>
@@ -116,7 +116,7 @@ if (isset($_POST['submit'])) {
 											<ul>
 												<li><strong><?php echo $reply->username; ?></strong></li>
 												<li>43 Posts</li>
-												<li><a href="profile.php">Profile</a>
+												<li><a href="<?php echo APPURL ?>/users/profile.php?id=<?php echo $_SESSION["user_id"] ?>">Profile</a>
 											</ul>
 										</div>
 									</div>

@@ -30,7 +30,7 @@ ORDER BY topics.create_at DESC
 
     $allTopics = $topics->fetchAll(PDO::FETCH_OBJ);
     
-}
+} else header("location: " . APPURL . "/404.php");
 
 ?>
 
